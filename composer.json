@@ -3,7 +3,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "App/",
-            "Dell\\PhpMvc\\": "src/"
+            "PhpMvc\\": "src/"
         }
     },
     "require": {
