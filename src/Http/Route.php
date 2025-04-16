@@ -1,46 +1,56 @@
 <?php
 
-namespace PhpMvc\Http;
+namespace SecTheater\Http;
 
-class Route{
+use SecTheater\View\View;
 
+class Route
+{
     protected Request $request;
     protected Response $response;
 
-    public function __construct(Request $request, Response $response){
+    protected static array $routes = [];
+
+    public function __construct(Request $request, Response $response)
+    {
         $this->request = $request;
         $this->response = $response;
     }
 
-    public static array $routes = [];
-
-    public static function get ($route, $action){
+    public static function get($route, $action)
+    {
         self::$routes['get'][$route] = $action;
     }
 
-    public static function post ($route, $action){
+    public static function post($route, $action)
+    {
         self::$routes['post'][$route] = $action;
-    } 
+    }
 
-    public function resolve(){
-        $path = $this->request->Path();
+    public function resolve()
+    {
+        $path = $this->request->path();
         $method = $this->request->method();
         $action = self::$routes[$method][$path] ?? false;
 
-        if (!$action){
-            return ;
+        if (!array_key_exists($path, self::$routes[$method])) {
+            $this->response->setStatusCode(404);
+            View::makeError('404');
         }
 
-        // 404 page
+        if (!$action) {
+            return;
+        }
 
-        if (is_callable($action))
-        {
+        if (is_callable($action)) {
             call_user_func_array($action, []);
         }
 
-        if (is_array($action))
-        {
-           call_user_func_array([new $action[0], $action[1]], []); 
+        if (is_array($action)) {
+            $controller = new $action[0];
+            $method = $action[1];
+
+            call_user_func_array([$controller, $method], []);
         }
-    } 
+    }
 }

@@ -2,8 +2,8 @@
     "name": "dell/php-mvc",
     "autoload": {
         "psr-4": {
-            "App\\": "App/",
-            "PhpMvc\\": "src/"
+            "App\\": "App",
+            "PhpMvc\\": "src"
         }
     },
     "require": {

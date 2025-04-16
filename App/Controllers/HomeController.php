@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
+use PhpMvc\View\view;
+
 class HomeController
 {
     public function index()
     {
-        return 'Hello, world!';
+        return view::make('home');
     }
 
 }
